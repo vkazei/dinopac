@@ -258,8 +258,8 @@ class Game {
     this.theme = MAZE_THEMES[Math.min(this.level - 1, MAZE_THEMES.length - 1)];
 
     // Speed ramps up then caps
-    const pSpeed = Math.min(1.4, 0.52 + (this.level - 1) * 0.08);
-    const gSpeed = Math.min(0.9, 0.36 + (this.level - 1) * 0.06);
+    const pSpeed = Math.min(1.68, 0.624 + (this.level - 1) * 0.096);
+    const gSpeed = Math.min(1.08, 0.432 + (this.level - 1) * 0.072);
     this.player = {
       x: cx(9), y: cy(18),
       vx: 0, vy: 0, speed: pSpeed,
