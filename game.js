@@ -145,6 +145,15 @@ class Game {
       else this.queuedDir = dy > 0 ? 'd' : 'u';
     }, { passive: true });
 
+    // D-pad controls (touch devices)
+    const dpadMap = { 'dpad-up':'u', 'dpad-down':'d', 'dpad-left':'l', 'dpad-right':'r' };
+    for (const [id, dir] of Object.entries(dpadMap)) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      el.addEventListener('touchstart', e => { e.preventDefault(); this.queuedDir = dir; }, { passive: false });
+      el.addEventListener('touchend',   e => e.preventDefault(), { passive: false });
+    }
+
     document.getElementById('startBtn').addEventListener('click',   () => { this.initAudio(); this.startGame(); });
     document.getElementById('restartBtn').addEventListener('click', () => { this.initAudio(); this.startGame(); });
   }
@@ -664,6 +673,15 @@ class Game {
   draw() {
     const ctx = this.ctx;
     const cw = this.canvas.width, ch = this.canvas.height;
+    const p  = this.player;
+
+    // Death screen shake
+    const shaking = p.dead && p.deathTimer < 600;
+    if (shaking) {
+      const intensity = (1 - p.deathTimer / 600) * 5;
+      ctx.save();
+      ctx.translate((Math.random() - 0.5) * intensity, (Math.random() - 0.5) * intensity);
+    }
 
     // Themed background
     ctx.fillStyle = this.theme.bg;
@@ -692,6 +710,8 @@ class Game {
     this.drawFloatingTexts();
     this.drawProgressBar();
     if (this.levelDone) this.drawBanner(`LEVEL ${this.level} CLEAR!`);
+
+    if (shaking) ctx.restore();
   }
 
   drawMaze() {
@@ -720,6 +740,8 @@ class Game {
     };
     ctx.save();
     ctx.strokeStyle = this.theme.wallStroke;
+    ctx.shadowColor = this.theme.wallGlow;
+    ctx.shadowBlur  = 5;
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -734,16 +756,21 @@ class Game {
   drawDots() {
     const ctx = this.ctx;
     const t = Date.now();
+    ctx.save();
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
         const v = this.maze[r][c];
         if (v === 0) {
+          ctx.shadowColor = this.theme.dotGlow;
+          ctx.shadowBlur  = 6;
           ctx.beginPath();
           ctx.arc(cx(c), cy(r), 2.5, 0, Math.PI * 2);
           ctx.fillStyle = this.theme.dotColor;
           ctx.fill();
         } else if (v === 2) {
           const pulse = 4 + Math.sin(t / 200) * 1.5;
+          ctx.shadowColor = this.theme.eggGlow;
+          ctx.shadowBlur  = 14;
           ctx.beginPath();
           ctx.ellipse(cx(c), cy(r), pulse * 0.75, pulse, 0, 0, Math.PI * 2);
           ctx.fillStyle = this.theme.eggColor;
@@ -751,10 +778,12 @@ class Game {
         }
       }
     }
+    ctx.restore();
   }
 
   spawnParticles(x, y, count) {
-    for (let i = 0; i < count; i++) {
+    const colors = [this.theme.dotGlow, this.theme.eggGlow, this.theme.dotColor];
+    for (let i = 0; i < count * 2; i++) {
       const angle = Math.random() * Math.PI * 2;
       const speed = 0.3 + Math.random() * 0.8;
       this.particles.push({
@@ -764,6 +793,7 @@ class Game {
         life: 250 + Math.random() * 200,
         maxLife: 450,
         size: 1 + Math.random() * 1.5,
+        color: colors[Math.floor(Math.random() * colors.length)],
       });
     }
   }
@@ -771,9 +801,11 @@ class Game {
   drawParticles() {
     const ctx = this.ctx;
     ctx.save();
-    ctx.fillStyle = this.theme.dotGlow;
+    ctx.shadowBlur = 4;
     for (const pt of this.particles) {
       ctx.globalAlpha = pt.life / pt.maxLife;
+      ctx.shadowColor = pt.color;
+      ctx.fillStyle   = pt.color;
       ctx.beginPath();
       ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
       ctx.fill();
@@ -931,11 +963,21 @@ class Game {
 
     // Power aura
     if (p.powered) {
-      ctx.strokeStyle = `rgba(0,255,136,${0.6 + Math.sin(Date.now()/100)*0.4})`;
-      ctx.lineWidth = 2.5;
+      const pulse = 0.6 + Math.sin(Date.now() / 100) * 0.4;
+      ctx.shadowColor = 'rgba(0,255,136,0.8)';
+      ctx.shadowBlur  = 12;
+      ctx.strokeStyle = `rgba(0,255,136,${pulse})`;
+      ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.ellipse(-r*0.05, r*0.06, r*0.65, r*0.55, 0, 0, Math.PI*2);
+      ctx.ellipse(-r*0.05, r*0.06, r*0.68, r*0.58, 0, 0, Math.PI*2);
       ctx.stroke();
+      ctx.shadowBlur  = 4;
+      ctx.strokeStyle = `rgba(0,255,136,${pulse * 0.5})`;
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.ellipse(-r*0.05, r*0.06, r*0.72, r*0.62, 0, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
     }
     ctx.restore();
   }
@@ -1014,7 +1056,7 @@ class Game {
       ctx.save();
       ctx.globalAlpha = alpha;
       ctx.fillStyle = ft.color || '#ffffff';
-      ctx.font = `bold 13px 'Courier New'`;
+      ctx.font = `9px 'Press Start 2P'`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
@@ -1029,7 +1071,7 @@ class Game {
     ctx.fillStyle = 'rgba(0,0,0,0.6)';
     ctx.fillRect(0, this.canvas.height/2 - 28, this.canvas.width, 56);
     ctx.fillStyle = '#7fff00';
-    ctx.font = `bold ${TILE * 1.2}px 'Courier New'`;
+    ctx.font = `bold ${TILE * 0.7}px 'Press Start 2P'`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(text, this.canvas.width/2, this.canvas.height/2);
     ctx.restore();

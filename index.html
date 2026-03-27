@@ -2,8 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>DINO-PAC</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0a1a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="DINO-PAC">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <style>
+    @font-face {
+      font-family: 'Press Start 2P';
+      src: url('press-start-2p.woff2') format('woff2');
+      font-display: swap;
+    }
+  </style>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,6 +35,14 @@
       <span id="level-display">1</span>
     </div>
     <canvas id="gameCanvas"></canvas>
+    <div id="dpad">
+      <div></div>
+      <button class="dpad-btn" id="dpad-up">▲</button>
+      <div></div>
+      <button class="dpad-btn" id="dpad-left">◀</button>
+      <button class="dpad-btn" id="dpad-down">▼</button>
+      <button class="dpad-btn" id="dpad-right">▶</button>
+    </div>
     <div id="overlay" class="active">
       <div id="overlay-content">
         <h1>DINO-PAC</h1>
@@ -46,5 +67,6 @@
     </div>
   </div>
   <script src="game.js"></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');</script>
 </body>
 </html>
