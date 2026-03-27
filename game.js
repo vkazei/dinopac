@@ -258,8 +258,8 @@ class Game {
     this.theme = MAZE_THEMES[Math.min(this.level - 1, MAZE_THEMES.length - 1)];
 
     // Speed ramps up then caps
-    const pSpeed = Math.min(1.68, 0.624 + (this.level - 1) * 0.096);
-    const gSpeed = Math.min(1.08, 0.432 + (this.level - 1) * 0.072);
+    const pSpeed = Math.min(1.4, 0.52 + (this.level - 1) * 0.08);
+    const gSpeed = Math.min(0.9, 0.36 + (this.level - 1) * 0.06);
     this.player = {
       x: cx(9), y: cy(18),
       vx: 0, vy: 0, speed: pSpeed,
@@ -740,8 +740,6 @@ class Game {
     };
     ctx.save();
     ctx.strokeStyle = this.theme.wallStroke;
-    ctx.shadowColor = this.theme.wallGlow;
-    ctx.shadowBlur  = 5;
     ctx.lineWidth = 2.5;
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -761,16 +759,12 @@ class Game {
       for (let c = 0; c < COLS; c++) {
         const v = this.maze[r][c];
         if (v === 0) {
-          ctx.shadowColor = this.theme.dotGlow;
-          ctx.shadowBlur  = 6;
           ctx.beginPath();
           ctx.arc(cx(c), cy(r), 2.5, 0, Math.PI * 2);
           ctx.fillStyle = this.theme.dotColor;
           ctx.fill();
         } else if (v === 2) {
           const pulse = 4 + Math.sin(t / 200) * 1.5;
-          ctx.shadowColor = this.theme.eggGlow;
-          ctx.shadowBlur  = 14;
           ctx.beginPath();
           ctx.ellipse(cx(c), cy(r), pulse * 0.75, pulse, 0, 0, Math.PI * 2);
           ctx.fillStyle = this.theme.eggColor;
@@ -801,10 +795,8 @@ class Game {
   drawParticles() {
     const ctx = this.ctx;
     ctx.save();
-    ctx.shadowBlur = 4;
     for (const pt of this.particles) {
       ctx.globalAlpha = pt.life / pt.maxLife;
-      ctx.shadowColor = pt.color;
       ctx.fillStyle   = pt.color;
       ctx.beginPath();
       ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
@@ -964,20 +956,16 @@ class Game {
     // Power aura
     if (p.powered) {
       const pulse = 0.6 + Math.sin(Date.now() / 100) * 0.4;
-      ctx.shadowColor = 'rgba(0,255,136,0.8)';
-      ctx.shadowBlur  = 12;
       ctx.strokeStyle = `rgba(0,255,136,${pulse})`;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.ellipse(-r*0.05, r*0.06, r*0.68, r*0.58, 0, 0, Math.PI*2);
       ctx.stroke();
-      ctx.shadowBlur  = 4;
       ctx.strokeStyle = `rgba(0,255,136,${pulse * 0.5})`;
       ctx.lineWidth = 6;
       ctx.beginPath();
       ctx.ellipse(-r*0.05, r*0.06, r*0.72, r*0.62, 0, 0, Math.PI*2);
       ctx.stroke();
-      ctx.shadowBlur = 0;
     }
     ctx.restore();
   }
