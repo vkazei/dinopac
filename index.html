@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DINO-PAC</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <div id="header">
+      <span id="score-label">SCORE</span>
+      <span id="score">0</span>
+      <span id="title-text">DINO-PAC</span>
+      <span id="lives-label">LIVES</span>
+      <span id="lives">3</span>
+    </div>
+    <div id="subheader">
+      <span id="hi-label">HI</span>
+      <span id="hi-score">0</span>
+      <span id="level-label">LEVEL</span>
+      <span id="level-display">1</span>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="overlay" class="active">
+      <div id="overlay-content">
+        <h1>DINO-PAC</h1>
+        <p class="subtitle">A prehistoric Pac-Man adventure</p>
+        <div class="legend">
+          <div class="legend-item">🦖 You are the T-Rex</div>
+          <div class="legend-item">🟢 Eat all eggs to reach next level!</div>
+          <div class="legend-item">🥚 Big eggs = power up!</div>
+          <div class="legend-item">🦅 Avoid pterodactyls</div>
+          <div class="legend-item">🦴 Grab the fossil bonus!</div>
+        </div>
+        <p class="controls">Arrow keys / WASD / Swipe to move</p>
+        <button id="startBtn">START GAME</button>
+      </div>
+    </div>
+    <div id="game-over-overlay" class="hidden">
+      <div id="game-over-content">
+        <h1 id="end-title">GAME OVER</h1>
+        <p id="final-score"></p>
+        <button id="restartBtn">PLAY AGAIN</button>
+      </div>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
