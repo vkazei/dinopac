@@ -249,9 +249,9 @@ class Game {
 
     this.maze[18][9] = 3; // clear player spawn cell BEFORE counting dots
 
-    // Progressive dot density: level 1 starts sparse (~25%), grows to full at level 20
-    if (this.level < 20) {
-      const keepFraction = 0.25 + (this.level - 1) / 19 * 0.75;
+    // Progressive dot density: level 1 ~12.5%, grows to 50% at level 20, stays at 50%
+    {
+      const keepFraction = Math.min(0.5, 0.125 + (this.level - 1) / 19 * 0.375);
       for (let r = 0; r < ROWS; r++)
         for (let c = 0; c < COLS; c++)
           if (this.maze[r][c] === 0 && Math.random() > keepFraction)
