@@ -249,6 +249,15 @@ class Game {
 
     this.maze[18][9] = 3; // clear player spawn cell BEFORE counting dots
 
+    // Progressive dot density: level 1 starts sparse (~25%), grows to full at level 20
+    if (this.level < 20) {
+      const keepFraction = 0.25 + (this.level - 1) / 19 * 0.75;
+      for (let r = 0; r < ROWS; r++)
+        for (let c = 0; c < COLS; c++)
+          if (this.maze[r][c] === 0 && Math.random() > keepFraction)
+            this.maze[r][c] = 3; // thin out regular dots only, keep power eggs
+    }
+
     this.totalDots = 0; this.dotsEaten = 0;
     for (let r = 0; r < ROWS; r++)
       for (let c = 0; c < COLS; c++)
@@ -414,7 +423,7 @@ class Game {
 
   // --- Fossil (fruit) ---
   updateFruit(dt) {
-    const triggers = [70, 140];
+    const triggers = [Math.floor(this.totalDots / 3), Math.floor(this.totalDots * 2 / 3)];
     if (!this.fruit.active) {
       if (this.fruit.triggerIdx < triggers.length &&
           this.dotsEaten >= triggers[this.fruit.triggerIdx]) {
