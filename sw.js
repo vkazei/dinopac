@@ -1,4 +1,4 @@
-const CACHE = 'dinopac-v3';
+const CACHE = 'dinopac-v4';
 const ASSETS = ['./', './index.html', './game.js', './style.css', './press-start-2p.woff2'];
 
 self.addEventListener('install', e => {

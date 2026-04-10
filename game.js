@@ -83,13 +83,75 @@ const MAZE3 = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 20
 ];
 
-const MAZE_TEMPLATES = [MAZE1, MAZE2, MAZE3];
+// ── MAZE 4 — Block Fortress (19×21) ──────────────────────────────────────
+const MAZE4 = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 0
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 1  open top (17)
+  [1,0,1,1,0,1,1,0,1,0,1,0,1,1,0,1,1,0,1],  // 2  block pairs
+  [1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1],  // 3  power eggs + open center
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 4  open connector
+  [1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,1],  // 5  col4=0, col14=0
+  ...GHOST_HOUSE_ROWS,                          // 6-12
+  [1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,1,0,1],  // 13 col4=0, col14=0
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 14 open connector
+  [1,2,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,2,1],  // 15 power eggs, col9=0
+  [1,0,1,1,0,1,1,0,1,0,1,0,1,1,0,1,1,0,1],  // 16
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 17
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 18 player spawn (17)
+  [1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,0,1],  // 19
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 20
+];
 
-// Visual theme per maze — colors shift as difficulty increases
+// ── MAZE 5 — Three Chambers (19×21) ──────────────────────────────────────
+const MAZE5 = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 0
+  [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1],  // 1  three chambers
+  [1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1],  // 2
+  [1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1],  // 3  power eggs + open bridge
+  [1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1],  // 4
+  [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1],  // 5  col4=0, col14=0
+  ...GHOST_HOUSE_ROWS,                          // 6-12
+  [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1],  // 13 col4=0, col14=0
+  [1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1],  // 14
+  [1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1],  // 15 power eggs, col9=0
+  [1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1],  // 16
+  [1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1],  // 17
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 18 player spawn
+  [1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,0,1],  // 19
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 20
+];
+
+// ── MAZE 6 — Corner Fortresses (19×21) ───────────────────────────────────
+const MAZE6 = [
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 0
+  [1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1],  // 1  corner walls
+  [1,0,0,1,0,1,1,0,0,0,0,0,1,1,0,1,0,0,1],  // 2
+  [1,2,0,0,0,1,1,0,0,0,0,0,1,1,0,0,0,2,1],  // 3  power eggs
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 4  open
+  [1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1],  // 5  col4=0, col14=0
+  ...GHOST_HOUSE_ROWS,                          // 6-12
+  [1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,1],  // 13 col4=0, col14=0
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 14
+  [1,0,2,0,0,1,1,0,0,0,0,0,1,1,0,0,2,0,1],  // 15 power eggs, col9=0
+  [1,0,0,1,0,1,1,0,0,0,0,0,1,1,0,1,0,0,1],  // 16
+  [1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1],  // 17
+  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],  // 18 player spawn
+  [1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,0,1],  // 19
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],  // 20
+];
+
+const MAZE_TEMPLATES = [MAZE1, MAZE2, MAZE3, MAZE4, MAZE5, MAZE6];
+
+// Prehistoric collectible items — one per maze cycle
+const FRUIT_ITEMS = ['🦴', '🥚', '🦕', '🌋', '🦷', '💎'];
+
+// Visual themes — cycle every 2 levels
 const MAZE_THEMES = [
-  { bg: '#020d02', wallFill: '#071507', wallStroke: '#1faa1f', wallGlow: '#00ff41', dotColor: '#77dd77', dotGlow: '#33ff55', eggColor: '#ccffcc', eggGlow: '#00ff88' },
-  { bg: '#020814', wallFill: '#070f1e', wallStroke: '#1a66cc', wallGlow: '#44aaff', dotColor: '#88bbff', dotGlow: '#66aaff', eggColor: '#aaddff', eggGlow: '#88ccff' },
-  { bg: '#120402', wallFill: '#1e0a04', wallStroke: '#bb4411', wallGlow: '#ff6622', dotColor: '#ffaa66', dotGlow: '#ff8844', eggColor: '#ffddaa', eggGlow: '#ffaa22' },
+  { bg: '#020d02', wallFill: '#071507', wallStroke: '#1faa1f', wallGlow: '#00ff41', dotColor: '#77dd77', dotGlow: '#33ff55', eggColor: '#ccffcc', eggGlow: '#00ff88' },  // green
+  { bg: '#020814', wallFill: '#070f1e', wallStroke: '#1a66cc', wallGlow: '#44aaff', dotColor: '#88bbff', dotGlow: '#66aaff', eggColor: '#aaddff', eggGlow: '#88ccff' },  // blue
+  { bg: '#120402', wallFill: '#1e0a04', wallStroke: '#bb4411', wallGlow: '#ff6622', dotColor: '#ffaa66', dotGlow: '#ff8844', eggColor: '#ffddaa', eggGlow: '#ffaa22' },  // red/orange
+  { bg: '#0d0214', wallFill: '#1a0728', wallStroke: '#8833cc', wallGlow: '#cc44ff', dotColor: '#cc88ff', dotGlow: '#bb66ff', eggColor: '#eeccff', eggGlow: '#dd99ff' },  // purple
+  { bg: '#001414', wallFill: '#001e1e', wallStroke: '#009999', wallGlow: '#00ffff', dotColor: '#88ffff', dotGlow: '#66ffee', eggColor: '#ccffff', eggGlow: '#99ffee' },  // cyan
 ];
 
 const PTERO_CFG = [
@@ -243,28 +305,19 @@ class Game {
   }
 
   initLevel() {
-    // Progress through mazes: level 1→easy, 2→medium, 3+→hard (stays hard)
-    const template = MAZE_TEMPLATES[Math.min(this.level - 1, MAZE_TEMPLATES.length - 1)];
+    // Cycle through all 6 maze layouts
+    const template = MAZE_TEMPLATES[(this.level - 1) % MAZE_TEMPLATES.length];
     this.maze = template.map(r => [...r]);
 
-    this.maze[18][9] = 3; // clear player spawn cell BEFORE counting dots
-
-    // Progressive dot density: level 1 ~12.5%, grows to 50% at level 20, stays at 50%
-    {
-      const keepFraction = Math.min(0.5, 0.125 + (this.level - 1) / 19 * 0.375);
-      for (let r = 0; r < ROWS; r++)
-        for (let c = 0; c < COLS; c++)
-          if (this.maze[r][c] === 0 && Math.random() > keepFraction)
-            this.maze[r][c] = 3; // thin out regular dots only, keep power eggs
-    }
+    this.maze[18][9] = 3; // clear player spawn cell
 
     this.totalDots = 0; this.dotsEaten = 0;
     for (let r = 0; r < ROWS; r++)
       for (let c = 0; c < COLS; c++)
         if (this.maze[r][c] === 0 || this.maze[r][c] === 2) this.totalDots++;
 
-    // Theme changes with maze
-    this.theme = MAZE_THEMES[Math.min(this.level - 1, MAZE_THEMES.length - 1)];
+    // Theme cycles every 2 levels
+    this.theme = MAZE_THEMES[Math.min(Math.floor((this.level - 1) / 2), MAZE_THEMES.length - 1)];
 
     // Speed ramps up then caps
     const pSpeed = Math.min(1.4, 0.52 + (this.level - 1) * 0.08);
@@ -312,7 +365,8 @@ class Game {
     this.eatBonus   = 200;
     this.levelDone  = false;
     this.levelDoneTimer = 0;
-    this.fruit = { active: false, timer: 0, triggerIdx: 0, value: 0 };
+    const fruitEmoji = FRUIT_ITEMS[(this.level - 1) % FRUIT_ITEMS.length];
+    this.fruit = { active: false, timer: 0, triggerIdx: 0, value: 0, emoji: fruitEmoji };
     this.particles = [];
   }
 
@@ -423,7 +477,7 @@ class Game {
 
   // --- Fossil (fruit) ---
   updateFruit(dt) {
-    const triggers = [Math.floor(this.totalDots / 3), Math.floor(this.totalDots * 2 / 3)];
+    const triggers = [Math.floor(this.totalDots / 4), Math.floor(this.totalDots / 2), Math.floor(this.totalDots * 3 / 4)];
     if (!this.fruit.active) {
       if (this.fruit.triggerIdx < triggers.length &&
           this.dotsEaten >= triggers[this.fruit.triggerIdx]) {
@@ -839,7 +893,7 @@ class Game {
     ctx.font = `${TILE * 0.9}px serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('🦴', 0, 2);
+    ctx.fillText(this.fruit.emoji, 0, 2);
     ctx.restore();
 
     const pct = this.fruit.timer / 10000;
